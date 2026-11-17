@@ -1,110 +1,98 @@
 # Page to Markdown X-Ray
 
-Версия 0.11.1 расширения Chrome: по нажатию кнопки сохраняет текущую HTTP(S)-страницу в Markdown. Анализ выполняется локально в браузере; содержимое страницы не отправляется в сторонний API. При открытии предпросмотра изображения могут повторно загружаться с исходного сайта.
+Turn a web page into readable Markdown, preserving its content, links, images, and page structure.
 
-## Что уже работает
+Version 0.11.1 is a Chrome extension that exports the current HTTP(S) page to a Markdown file. Analysis runs locally in the browser; page content is not sent to an external API. Images may be fetched again from their original websites when you open the preview.
 
-- Popup с выбором имени файла и области экспорта.
-- Выпадающий список типа страницы с подсказкой: автоматически или вручную — статья, карточка материала, лента, страница с карточками, веб-приложение.
-- Чекбоксы для разделов отчёта и выбор объёма текста: полный, первые абзацы каждого раздела или только заголовки. Режим первых абзацев не создаёт пересказ.
-- Кнопка «Просмотреть» открывает отдельную вкладку: слева исходный Markdown, справа читаемая версия. Из этой вкладки можно скачать `.md`.
-- Извлечение заголовков, абзацев, списков, таблиц, блоков кода, ссылок и изображений из DOM.
-- Дерево заголовков и список изображений по доступной разметке.
-- Список ссылок и элементов управления из выбранной области без предположений об их результате.
-- Несколько технологических признаков с указанием источника и уверенности.
-- Технологии и ограничения выводятся в начале Markdown. Локальные правила распознают Tilda, WordPress, Shopify, Webflow, Next.js, Nuxt, MediaWiki и некоторые признаки React. Одно совпадение в пути URL не считается доказательством.
+## Features
 
-Описание изображений по их содержимому и запись действий остаются будущими задачами. Снимок страницы в план экспорта не входит.
+- A popup for choosing the file name and export scope.
+- A page-type dropdown with a tooltip. Choose automatic detection or select article, content item, feed, card-based page, or web app.
+- Checkboxes for report sections and three text modes: full text, first paragraphs of each section, or headings only. The first-paragraph mode does not generate a summary.
+- A **Preview** button that opens a tab with raw Markdown on the left and a rendered view on the right. You can also download the `.md` file from that tab.
+- Extraction of headings, paragraphs, lists, tables, code blocks, links, and images from the DOM.
+- A heading tree and an image list based on the available markup.
+- A list of links and controls within the selected scope, without claiming to know the result of an action.
+- Experimental technology detection with evidence and confidence levels. The local rules recognize Tilda, WordPress, Shopify, Webflow, Next.js, Nuxt, MediaWiki, and some React signals. A match in a URL path alone is not treated as proof.
 
-В 0.5.1 исправлены пробелы между соседними элементами текста, подписи ссылок с изображениями и обозначение фактической области экспорта. В режиме основной части список элементов проходит ту же очистку, что и содержание.
+Technology findings and analysis limitations can appear at the top of the Markdown report. Describing images by their visual content and recording interactions remain future work. Page screenshots are outside the export plan.
 
-В 0.5.2 основной режим исключает семантически отмеченные меню, боковые области и диалоги, а также маленькие декоративные изображения. Повторяющиеся заголовки, изображения и элементы управления объединяются в списках; ссылки с разными адресами остаются раздельными. Когда список или таблица сокращены, Markdown показывает исходное количество элементов. Режим «Вся страница» сохраняет текстовые блоки без этой дополнительной очистки.
+## Development
 
-В 0.5.3 при отсутствии семантического контейнера основной режим убирает насыщенные ссылками блоки перед первым заголовком. На страницах Wikipedia исключаются языковая панель, инструменты страницы и ссылки редактирования. Элементы с `href="#"` или `javascript:` отмечаются как действия, а варианты тональности объединяются в одну строку.
+The repository contains the extension source, icons, and tests. Release archives in `dist/` are generated locally and excluded from Git. No build step or external dependencies are required: Chrome loads the extension directly from the project root.
 
-В 0.6.0 лента экспортируется как отдельные загруженные публикации (до 30). Карточка материала получает краткие сведения из доступной разметки. Для веб-приложения поля и возможные сценарии форм идут перед текстом страницы. Сценарии показывают только структуру формы; результаты действий не проверяются. Значения полей ввода не читаются.
-
-В 0.6.1 выбор типа страницы стал выпадающим списком с поясняющей подсказкой.
-
-В 0.7.0 раздел ограничений сообщает счётчики для конкретной страницы: заголовки, абзацы, изображения, iframe, исключённые служебные и скрытые узлы, а также сработавшие лимиты списков и таблиц. Для ленты показаны найденные и экспортированные публикации. Из пустых форм без доступного поля больше не создаётся сценарий; ссылки управления тональностью не попадают в текст карточки песни.
-
-В 0.8.0 таблица технологий показывает типы улик и время проверки, а текст уточняет, что вывод относится к текущей странице. Добавлено правило MediaWiki с сохранением версии из метатега `generator`. Снимок страницы исключён из интерфейса и плана.
-
-В 0.9.0 режим «Основная часть» отделяет читаемый текст от исследовательских списков: служебные секции и элементы управления не попадают в текст статьи или карточки, но остаются в списках ссылок и действий выбранной области. Карта разделов стала деревом заголовков без похожих материалов, исключённых из основного текста. Сноски Wikipedia записываются как `[^1]` с определениями и исходными ссылками; ссылки в таблицах сохраняются. Предпросмотр показывает переходы к сноскам и корректно форматирует жирный, курсивный и встроенный код.
-
-В 0.9.1 главная YouTube определяется как лента загруженных видео: каждое видео выводится отдельно, рекламные карточки не входят в основной экспорт. Миниатюры, доступные только как фон или ещё не загруженные, не описываются как изображения. Из текста статей Wikipedia убраны служебные категории; они остаются в исследовательских списках выбранной области.
-
-В 0.9.2 заголовком каждого видео на главной YouTube служит название со ссылкой; аватары каналов не дублируются в основном тексте.
-
-В 0.10.0 повторяющиеся группы карточек определяются по DOM-структуре без правил для конкретных доменов. Визуальные карточки с заголовком внутри ссылки выводятся кратко, а карточки с условиями, таблицы и соседние разделы сохраняются подробно. Неподписанные поля не служат основанием для определения веб-приложения; их число указывается в ограничениях. Тип «Страница с карточками» можно выбрать вручную.
-
-В 0.10.1 даты экспорта и проверки технологий отображаются в читаемом виде с часовым поясом. Определение технологий помечено как alpha; его раздел можно включать и отключать в popup. Раздел ограничений объясняет, какие данные были доступны, пропущены или сокращены; его чекбокс также управляет включением в файл. Подсказки полей отделены от подписей. Временные сообщения загрузки не попадают в основной текст. Для длинных адресов используется стандартный синтаксис ссылок Markdown с полными URL в конце файла; предпросмотр поддерживает такие ссылки.
-
-В 0.10.3 логотип переосмыслен на основе предоставленного образца: крупная версия сохраняет квадрат, знак Markdown со стрелкой и подпись x-ray. Маленькая эмблема использует X с линией сканирования, чтобы читаться в панели Chrome без текста. Её же показывают popup и предпросмотр. Исходный образец хранится в `assets/logo-source.jpeg`; на macOS значки пересоздаются командой `python3 scripts/make_icon.py` (векторный рисунок в `scripts/render_icon.c`).
-
-В 0.10.4 popup стал компактнее. Разделы «Элементы и ссылки», «Технологии (alpha)» и «Ограничения анализа» изначально выключены; при необходимости их можно включить перед экспортом.
-
-В 0.10.5 выбор основной области больше не принимает первую карточку `<article>` за всю страницу. Сначала используется семантический `<main>` или `[role="main"]`; при его отсутствии одиночная статья выбирается только если занимает большую часть видимого текста. На главных страницах с несколькими небольшими статьями анализируется очищенное содержимое всей страницы. Это исправляет слишком короткий экспорт Woodlebs без правила для конкретного сайта.
-
-В 0.10.7 в верхней части popup появился выбор English, Русский или 中文. Язык интерфейса определяется по языку браузера при первом открытии и затем сохраняется в `chrome.storage.local`. Переключение переводит подписи, подсказку и сообщения popup; язык содержимого Markdown и отдельной вкладки предпросмотра пока остаётся русским.
-
-В 0.10.8 подсказка о типе страницы закреплена по ширине блока настроек, чтобы оставаться видимой при переключении языка.
-
-В 0.10.9 при нескольких `<article>` основным считается материал с заголовком первого уровня и содержательным текстом или медиа. Это сохраняет компактный экспорт песни KG-MUSIC после исправления главных страниц вроде Woodlebs.
-
-В 0.11.0 из основной части убраны отдельные блоки обсуждений внутри публикаций ленты, плотные навигационные списки перед разделами страниц с карточками и вложенные временные сообщения загрузки. Режим «Вся страница» сохраняет исходный объём доступного DOM.
-
-В 0.11.1 длинная статья определяется по структуре и доле основного текста, даже если рядом находятся карточки рекомендаций. В режиме «Основная часть» рекомендации за пределами статьи, компактные блоки комментариев, оглавления с якорными ссылками, кнопки ленты и счётчики реакций исключаются из текста. Правила опираются на структуру страницы, а не на адрес сайта.
-
-## Разработка и публикация исходников
-
-Репозиторий хранит исходники расширения, иконки и тесты. Архивы в `dist/` создаются локально и не включаются в Git. Сборка не нужна: Chrome загружает расширение прямо из корня проекта.
-
-Проверка перед отправкой изменений:
+Run the tests before sharing changes:
 
 ```sh
 node --test tests/*.test.mjs
 ```
 
-Для первого коммита проверьте список файлов командой `git status --short`, затем добавьте нужные файлы и создайте коммит. Отправка в GitHub выполняется отдельно; адрес `origin` уже задан.
+For a first commit, review `git status --short`, add the files you want to publish, and create a commit. The `origin` remote is already configured; pushing to GitHub is a separate step.
 
-## Установка для разработки
+## Install locally
 
-1. Откройте `chrome://extensions`.
-2. Включите **Режим разработчика**.
-3. Нажмите **Загрузить распакованное расширение** и выберите эту папку.
-4. Откройте обычную веб-страницу и нажмите на значок расширения.
+1. Open `chrome://extensions`.
+2. Enable **Developer mode**.
+3. Click **Load unpacked** and select the project root.
+4. Open a regular web page and click the extension icon.
 
-Внешние зависимости и сборка не требуются. После изменения файлов нажмите **Обновить** на карточке расширения.
+After editing the source, click **Reload** on the extension card.
 
-## Структура
+## Project structure
 
-- `manifest.json` — Manifest V3 и минимальные разрешения.
-- `src/popup/` — интерфейс и скачивание файла.
-- `src/content/fingerprints.js` — расширяемые локальные правила определения технологий.
-- `src/content/extract.js` — извлечение и формирование Markdown в контексте текущей страницы.
-- `assets/icon-16.png`, `assets/icon-32.png`, `assets/icon-48.png`, `assets/icon-128.png` — значки Chrome; `assets/icon-symbol-48.png` — знак интерфейса.
-- `TODO.md` — план развития.
+- `manifest.json` — Manifest V3 configuration and minimal permissions.
+- `src/popup/` — popup interface and Markdown download.
+- `src/content/fingerprints.js` — extensible local technology-detection rules.
+- `src/content/extract.js` — page extraction and Markdown generation.
+- `src/preview/` — side-by-side Markdown preview.
+- `assets/` — Chrome icons and interface artwork.
+- `tests/` — extraction, export-quality, and preview tests.
+- `TODO.md` — development plan.
 
-## Ограничения первого прототипа
+The large logo follows the supplied square Markdown-and-arrow concept with an x-ray label. The small icon uses an X and a scan line so it remains legible in Chrome's toolbar. The source reference is `assets/logo-source.jpeg`. On macOS, regenerate the icons with `python3 scripts/make_icon.py`; the vector drawing is in `scripts/render_icon.c`.
 
-- Работает только на страницах `http://` и `https://`, доступных расширениям Chrome.
-- Не читает содержимое iframe, скрытые состояния и результаты нажатий.
-- Изображения в Markdown остаются ссылками на исходный сайт.
-- При локальном открытии Markdown некоторые изображения могут потребовать подключения к интернету или авторизации на сайте.
-- Предпросмотр хранит Markdown в памяти браузера через `chrome.storage.session`: данные очищаются при перезапуске браузера или обновлении расширения. Старые черновики удаляются при создании нового предпросмотра через час.
-- Встроенный просмотрщик поддерживает форматирование, которое создаёт экспортёр: заголовки, абзацы, списки, таблицы, ссылки, изображения, цитаты и блоки кода. Произвольный Markdown может отображаться не полностью.
+## Current limitations
 
-## Определение технологий
+- The extension works only on `http://` and `https://` pages accessible to Chrome extensions.
+- It does not inspect iframe content, hidden states, or the outcomes of clicks.
+- Markdown images remain links to the original website. Viewing them later may require an internet connection or authentication.
+- The preview keeps Markdown in `chrome.storage.session`. This data is cleared when the browser restarts or the extension reloads; older preview drafts are removed when a new preview is created after an hour.
+- The built-in renderer supports the Markdown produced by the exporter: headings, paragraphs, lists, tables, links, images, quotes, and code blocks. It may not render arbitrary Markdown completely.
+- Technology detection is experimental and cannot reveal hidden server-side components.
 
-Правила проверяют домен страницы, `meta[name="generator"]`, URL загруженных ресурсов и характерные элементы DOM. Совпадения сохраняются как отдельные улики. Сумма весов 1 означает низкую уверенность, 2 — среднюю, от 3 — высокую. Один ресурс стороннего сервиса может быть встроенным виджетом, поэтому выводы следует читать вместе с уликами. Анализ не обращается к стороннему API и не определяет скрытые серверные компоненты.
+## Technology detection
 
-## Подготовка ZIP для Chrome Web Store
+The local rules examine the page domain, `meta[name="generator"]`, loaded resource URLs, and distinctive DOM elements. Each match is kept as separate evidence. A total weight of 1 means low confidence, 2 means medium confidence, and 3 or more means high confidence. A third-party resource may be an embedded widget, so interpret findings alongside their evidence. The analysis does not call an external API.
 
-После проверки можно выполнить из корня проекта:
+## Prepare a ZIP for the Chrome Web Store
+
+After testing, run this from the project root:
 
 ```sh
 zip -r /tmp/page-to-markdown-xray.zip manifest.json src assets
 ```
 
-`manifest.json` должен находиться в корне архива.
+`manifest.json` must be at the root of the archive.
+
+## Release notes
+
+- **0.11.1:** Detects a dominant long article by its structure and share of the main text, even when recommendation cards are nearby. In the main-content mode, removes recommendations outside the article, short comment blocks, anchor-link tables of contents, feed buttons, and reaction counts. These rules use page structure rather than site-specific domains.
+- **0.11.0:** Removes isolated comment threads inside feed posts, dense navigation lists before card-based sections, and nested loading messages from main content. The whole-page mode retains the available DOM text.
+- **0.10.9:** When multiple `<article>` elements exist, selects a primary item with a first-level heading and substantial text or media. This preserves the compact KG-MUSIC song export after improvements to home pages such as Woodlebs.
+- **0.10.8:** Keeps the page-type tooltip within the settings panel when switching languages.
+- **0.10.7:** Adds English, Russian, and Chinese UI choices at the top of the popup. The initial choice follows the browser language and is saved in `chrome.storage.local`. Popup labels, the tooltip, and messages are translated; generated Markdown and the preview interface remain in Russian.
+- **0.10.5:** Prefers semantic `<main>` or `[role="main"]` over the first `<article>`. Without a main container, selects a single article only when it contains most of the visible text. Otherwise, analyzes the cleaned full page. This fixes short Woodlebs exports without a site-specific rule.
+- **0.10.4:** Makes the popup more compact. **Elements and links**, **Technologies (alpha)**, and **Analysis limitations** are off by default and can be enabled before export.
+- **0.10.3:** Updates the logo and toolbar icon based on the supplied reference artwork.
+- **0.10.1:** Shows export and technology-check dates in a readable format with time zone. Marks technology detection as alpha and makes its section optional. Explains available, skipped, and truncated data in an optional limitations section. Separates field placeholders from labels, removes temporary loading messages from main text, and stores long Markdown link URLs at the end of the file.
+- **0.10.0:** Detects repeated card groups from DOM structure without domain-specific rules. Summarizes visual cards with linked headings while preserving detailed cards, tables, and adjacent sections. Unlabeled fields no longer imply a web app; their count appears in limitations. Adds a manual **Card-based page** type.
+- **0.9.2:** Uses linked video titles as headings on the YouTube home page and avoids duplicate channel avatars in main content.
+- **0.9.1:** Exports loaded YouTube home-page videos as separate feed items, excluding ad cards from the main export. Background-only or unloaded thumbnails are not described as images. Removes Wikipedia maintenance categories from article text while retaining them in research lists.
+- **0.9.0:** Separates readable main content from research lists. Service sections and controls stay out of article or item text but remain in the selected scope's links and actions. Adds a filtered heading tree, Wikipedia-style footnotes with source links, links inside tables, and improved preview formatting.
+- **0.8.0:** Adds evidence types and check time to the technology table, clarifies that findings apply to the current page, and recognizes MediaWiki with its generator version. Removes screenshots from the interface and plan.
+- **0.7.0:** Adds page-specific limitation counts for headings, paragraphs, images, iframes, excluded service and hidden nodes, and list/table limits. Feeds report found and exported posts. Empty forms no longer create scenarios, and key-change controls stay out of song text.
+- **0.6.1:** Changes page-type selection to a dropdown with an explanatory tooltip.
+- **0.6.0:** Exports up to 30 loaded feed posts individually. Adds basic item metadata and lists web-app fields and possible form scenarios before page text. Scenarios describe form structure only; input values and action outcomes are not read.
+- **0.5.3:** Removes link-heavy blocks before the first heading when no semantic main container exists. Excludes Wikipedia language and page tools. Marks `href="#"` and `javascript:` links as actions and groups musical key options.
+- **0.5.2:** In main-content mode, excludes semantic menus, sidebars, dialogs, and small decorative images. Groups repeated headings, images, and controls while keeping distinct link URLs separate. Reports original item counts when lists or tables are shortened. Whole-page mode retains text blocks without this extra cleanup.
+- **0.5.1:** Fixes spacing between adjacent text elements, labels for image links, and the actual export-scope description. Applies the same cleanup to main-content elements and text.
