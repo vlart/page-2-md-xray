@@ -49,7 +49,7 @@ After editing the source, click **Reload** on the extension card.
 - `tests/` — extraction, export-quality, and preview tests.
 - `TODO.md` — development plan.
 
-The large logo follows the supplied square Markdown-and-arrow concept with an x-ray label. The small icon uses an X and a scan line so it remains legible in Chrome's toolbar. The source reference is `assets/logo-source.jpeg`. On macOS, regenerate the icons with `python3 scripts/make_icon.py`; the vector drawing is in `scripts/render_icon.c`.
+The editable logo source is `assets/xray-logo.svg`. It contains the full logo and a compact X-and-scan-mark symbol for small sizes. Chrome and the popup use ready-made PNGs from `assets/`; editing the SVG does not automatically update those PNGs. The original visual reference is `assets/logo-source.jpeg`.
 
 ## Current limitations
 
