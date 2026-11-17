@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page to Markdown X-Ray</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="panel">
+      <header class="header">
+        <div class="mark" aria-hidden="true"><img src="../../assets/icon-symbol-48.png" alt="" /></div>
+        <div class="brand-copy"><p class="eyebrow">PAGE → MARKDOWN</p><h1 data-i18n="title">Рентген страницы</h1></div>
+        <label class="language-control"><span data-i18n="language">Язык</span><select id="language" aria-label="Язык интерфейса"><option value="en">English</option><option value="ru">Русский</option><option value="zh">中文</option></select></label>
+      </header>
+
+      <section class="page-card" aria-label="Текущая страница" data-i18n-aria="currentTab">
+        <span class="label" data-i18n="currentTab">ТЕКУЩАЯ ВКЛАДКА</span>
+        <strong id="page-title"></strong>
+        <span id="page-url" class="page-url"></span>
+      </section>
+
+      <form id="export-form">
+        <label class="field-label" for="filename" data-i18n="filename">Имя файла</label>
+        <div class="filename-row"><input id="filename" type="text" required maxlength="100" autocomplete="off" /><span>.md</span></div>
+
+        <fieldset>
+          <legend data-i18n="scope">Содержимое</legend>
+          <label class="option"><input type="radio" name="scope" value="main" checked /><span><b data-i18n="main">Основная часть</b><small data-i18n="mainHint">Без меню и футера, если их можно отделить</small></span></label>
+          <label class="option"><input type="radio" name="scope" value="full" /><span><b data-i18n="whole">Вся страница</b><small data-i18n="wholeHint">Все доступные текстовые блоки</small></span></label>
+        </fieldset>
+
+        <div class="page-type-field">
+          <div class="field-heading">
+            <label class="field-label" for="page-type" data-i18n="pageType">Тип страницы</label>
+            <span class="help-wrap">
+              <button class="help-button" type="button" aria-label="Зачем выбирать тип страницы?" data-i18n-aria="pageTypeWhy" aria-describedby="page-type-help">?</button>
+              <span class="help-tooltip" id="page-type-help" role="tooltip" data-i18n="pageTypeHelp">Тип страницы меняет структуру Markdown: статья — текст, карточка — один материал, лента — публикации, страница с карточками — повторяющиеся предложения и разделы, веб-приложение — поля и действия. Авто обычно достаточно; выберите вручную, если структура распознана неверно.</span>
+            </span>
+          </div>
+          <select id="page-type" name="pageType">
+            <option value="auto" selected data-i18n="auto">Определить автоматически</option>
+            <option value="article" data-i18n="article">Статья</option>
+            <option value="card" data-i18n="card">Карточка материала</option>
+            <option value="feed" data-i18n="feed">Лента</option>
+            <option value="mixed" data-i18n="mixed">Страница с карточками</option>
+            <option value="app" data-i18n="app">Веб-приложение</option>
+          </select>
+        </div>
+
+        <fieldset id="text-mode">
+          <legend data-i18n="textAmount">Объём текста</legend>
+          <label class="option"><input type="radio" name="textMode" value="full" checked /><span><b data-i18n="fullText">Полный текст</b><small data-i18n="fullTextHint">Весь извлечённый материал</small></span></label>
+          <label class="option"><input type="radio" name="textMode" value="brief" /><span><b data-i18n="firstParagraphs">Первые абзацы</b><small data-i18n="firstParagraphsHint">По одному абзацу на раздел, без пересказа</small></span></label>
+          <label class="option"><input type="radio" name="textMode" value="outline" /><span><b data-i18n="headingsOnly">Только заголовки</b><small data-i18n="headingsOnlyHint">Контур страницы без основного текста</small></span></label>
+        </fieldset>
+
+        <fieldset>
+          <legend data-i18n="include">Что включить в файл</legend>
+          <div class="checks">
+            <label><input type="checkbox" name="sections" value="source" checked /><span data-i18n="source">Источник и дата</span></label>
+            <label><input type="checkbox" name="sections" value="description" checked /><span data-i18n="description">Описание страницы</span></label>
+            <label><input type="checkbox" name="sections" value="content" checked /><span data-i18n="content">Текст страницы</span></label>
+            <label><input type="checkbox" name="sections" value="map" checked /><span data-i18n="map">Карта разделов</span></label>
+            <label><input type="checkbox" name="sections" value="images" checked /><span data-i18n="images">Изображения</span></label>
+            <label><input type="checkbox" name="sections" value="actions" /><span data-i18n="actions">Элементы и ссылки</span></label>
+            <label><input type="checkbox" name="sections" value="technologies" /><span data-i18n="technologies">Технологии (alpha)</span></label>
+            <label><input type="checkbox" name="sections" value="limitations" /><span data-i18n="limitations">Ограничения анализа</span></label>
+          </div>
+          <p class="checks-note" data-i18n="checksNote">Технологии определяются экспериментально. Ограничения показывают, что не вошло в анализ.</p>
+        </fieldset>
+
+        <div class="button-row">
+          <button id="preview-button" class="secondary" type="button"><span data-i18n="preview">Просмотреть</span><span aria-hidden="true">◫</span></button>
+          <button id="export-button" type="submit"><span data-i18n="save">Сохранить</span><span aria-hidden="true">↗</span></button>
+        </div>
+      </form>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <div class="footer"><span>v0.11.1 · <span data-i18n="localExport">локальный экспорт</span></span><span data-i18n="noAi">Без внешнего ИИ</span></div>
+    </main>
+    <script src="i18n.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

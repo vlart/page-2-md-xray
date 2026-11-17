@@ -1,0 +1,15 @@
+# Generated release archives; keep source files in Git.
+dist/
+
+# Local editor and operating-system files.
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local configuration and credentials.
+.env
+.env.*
+!.env.example
+*.pem
+*.key

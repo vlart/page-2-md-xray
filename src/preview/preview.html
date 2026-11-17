@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Предпросмотр Markdown</title>
+    <link rel="stylesheet" href="preview.css" />
+  </head>
+  <body>
+    <header class="toolbar">
+      <div class="brand"><span class="brand-mark"><img src="../../assets/icon-symbol-48.png" alt="" /></span><div><small>PAGE → MARKDOWN</small><strong id="document-name">Предпросмотр</strong></div></div>
+      <div class="toolbar-actions"><span id="status" role="status">Открываем файл…</span><button id="download" type="button" disabled>Скачать .md</button></div>
+    </header>
+    <main class="columns">
+      <section class="pane raw-pane" aria-labelledby="raw-title">
+        <h2 id="raw-title">Исходный Markdown <span>RAW</span></h2>
+        <pre id="raw" tabindex="0"></pre>
+      </section>
+      <section class="pane rendered-pane" aria-labelledby="rendered-title">
+        <h2 id="rendered-title">Читаемый вид <span>PREVIEW</span></h2>
+        <article id="rendered" class="markdown-body"></article>
+      </section>
+    </main>
+    <script src="preview.js"></script>
+  </body>
+</html>

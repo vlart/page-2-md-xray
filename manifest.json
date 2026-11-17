@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Page to Markdown X-Ray",
+  "version": "0.11.1",
+  "description": "Сохраняет текущую страницу в Markdown с картой интерфейса, действий и признаков технологий.",
+  "action": {
+    "default_title": "Сохранить страницу в Markdown",
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "assets/icon-16.png",
+      "32": "assets/icon-32.png",
+      "48": "assets/icon-48.png"
+    }
+  },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "icons": {
+    "16": "assets/icon-16.png",
+    "32": "assets/icon-32.png",
+    "48": "assets/icon-48.png",
+    "128": "assets/icon-128.png"
+  }
+}
